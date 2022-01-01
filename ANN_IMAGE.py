@@ -19,11 +19,12 @@ IMG_SIZE=50
 
 # Ex. of an sample image is shown below
 for category in CATEGORIES:
+    #os.path.join combines path names into one complete path.
     path = os.path.join(DATADIR, category) # path to colors dirs
     for category in CATEGORIES:
         path=os.path.join(DATADIR, category)
     for img in os.listdir(path):
-        img_array=cv2.imread(os.path.join(path,img))
+        img_array=cv2.imread(os.path.join(path,img)) #cause img is named by numbers
         plt.imshow(img_array)
         plt.show()
         break
@@ -58,7 +59,9 @@ y=[]
 for categories, label in training_data:
     x.append(categories)
     y.append(label)
+#print(x)
 x= np.array(x).reshape(lenOfTrainingImages,-1)
+#print(x)
 
 
 # Show the shap on X
@@ -69,6 +72,7 @@ x = x/255.0
 
 # Ex. of flattened array...
 x[1]
+
 
 # make y in array form
 y=np.array(y)
@@ -85,9 +89,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split,learning_curve
 
-X_train, X_test, Y_train,Y_test = train_test_split(x, y, test_size = 0.33, random_state = 42)
+X_train, X_test, Y_train,Y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
 
-#X_train , X_test = X_train / 255.0 , X_test / 255.0 
+#X_train , X_test = X_train / 200.0 , X_test / 200.0 
 x.shape
 y.shape
 X_train.shape
@@ -96,14 +100,14 @@ ann = models.Sequential([
         layers.Flatten(),
         layers.Dense(256, activation='relu'),
         layers.Dense(64, activation='relu'),
-        layers.Dense(9, activation='sigmoid')    
+        layers.Dense(9, activation='softmax')    
     ])
 
 ann.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-History = ann.fit(X_train, Y_train, epochs = 100, batch_size = 10, verbose = 1,validation_split = 0.3)
+History = ann.fit(X_train, Y_train, epochs = 135, batch_size = 10, verbose = 1,validation_split = 0.1)
 
 print('############################################')
 ###lose curve
@@ -125,6 +129,7 @@ print('############################################')
 from mlxtend.plotting import plot_decision_regions
 plot_decision_regions(X_train, Y_train, clf=ann, zoom_factor=1)
 plt.show()
+
 
 print('############################################')
 

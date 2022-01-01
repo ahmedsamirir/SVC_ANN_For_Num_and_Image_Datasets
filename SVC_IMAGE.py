@@ -13,7 +13,7 @@ from tqdm import tqdm
 # Set data directory to DATADIR variable and labels of color set to CATEGORIES variable.
 DATADIR = "Datasets/ColorClassification"
 CATEGORIES = ["Black", "Blue", "Brown", "Green", "orange", "red", "Violet", "White", "Yellow"]
-IMG_SIZE=100
+IMG_SIZE=96
 
 # Ex. of an sample image is shown below
 for category in CATEGORIES:

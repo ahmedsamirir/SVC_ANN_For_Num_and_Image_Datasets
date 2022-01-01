@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 import os #using files
 import numpy as np #handle array or matrix
@@ -113,9 +113,10 @@ X_test = sc.transform(X_test)
 
 
 ###model training
-
 from sklearn.svm import SVC
-clf = SVC(kernel='rbf' , C =70 , random_state=40)
+#The C parameter tells the SVM optimization how much you want to avoid misclassifying each training example.
+#'rbf' -> the radial basis function kernel / it is commonly used in support vector machine classification.
+clf = SVC(kernel='rbf' , C =70 , random_state=40) 
 fitting=clf.fit(X_train, y_train)
 clf.fit(X_train, y_train)
 
@@ -127,19 +128,19 @@ print("The test accuracy score of SVM is ", accuracy_score(y_test, y_pred))
 
 
 #####confusion matrix
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 print(cm)
 accuracy_score(y_test, y_pred)
 
 
 ##ROC Curve
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve
 y_pred = clf.predict(X_test).ravel()
 
 
 
-####Learing Curve for testing dataset
+####Learing Curve for training dataset
 train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train, cv=10, scoring='accuracy', n_jobs=-1, train_sizes=np.linspace(0.01, 1.0, 50))
 train_mean = np.mean(train_scores, axis=1)
 train_std = np.std(train_scores, axis=1)
@@ -182,7 +183,6 @@ plt.show()
 
 '''###########################################---ANN---#######################################'''
 
-
 from keras.layers import Dense , Dropout
 import tensorflow as tf
 import numpy as np
@@ -193,11 +193,17 @@ from tensorflow.keras.optimizers import SGD
 mnist=db_new
 X = db_new.drop('fraudulent', axis = 1)
 y = db_new['fraudulent']
-X_train , X_test, Y_train , Y_test = train_test_split(X, y , test_size = 0.2)
+
+#####split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
 
 
 X_train , X_test = X_train / 255.0 , X_test / 255.0 
 
+#Dropout is a technique used to prevent a model from overfitting.
+#Dense is used to create fully connected layers, in which every output depends on every input.
+#ReLU stands for Rectified Linear Unit. The main advantage of using the ReLU function over other activation functions is that it does not activate all the neurons at the same time.
+#Softmax is an activation function that scales numbers/logits into probabilities. The output of a Softmax is a vector (say v ) with probabilities of each possible outcome
 model = tf.keras.models.Sequential([tf.keras.layers.Flatten(input_shape=(1680 , 1050)) ,tf.keras.layers.Dense(128 , activation='relu') ,tf.keras.layers.Dropout(0.2) ,tf.keras.layers.Dense(10 , activation='softmax')])
 ####
 #calculate how often predictions equal to labels
@@ -206,6 +212,7 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(input_shape=(1680 , 
 tf.random.set_seed(42)
 
 # 1. Create the model using the Sequential API
+#The “Sequential API” is one of the 3 ways to create a Keras model with TensorFlow 2.0. A sequential model, as the name suggests, allows you to create models layer-by-layer in a step-by-step fashion.
 model= tf.keras.Sequential([tf.keras.layers.Dense(1)])
 
 # 2. Compile the model
